@@ -12,7 +12,7 @@ export const Footer: Component = () => (
       >
         Oakland ARTCC on VATSIM
       </a>
-      <a href="https://github.com/vzoa/NctVisualizer">
+      <a href="https://github.com/vzoa/ZoaVisualizer">
         <svg
           aria-hidden="true"
           viewBox="0 0 16 16"
