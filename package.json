@@ -1,0 +1,35 @@
+{
+  "name": "vite-template-solid",
+  "version": "0.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "prettier": "^3.5.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.1.0",
+    "vite-plugin-solid": "^2.11.1"
+  },
+  "dependencies": {
+    "@corvu/dialog": "^0.2.4",
+    "@kobalte/core": "^0.13.8",
+    "@solid-primitives/mouse": "^2.1.0",
+    "@solid-primitives/storage": "^4.3.1",
+    "@tailwindcss/vite": "^4.0.6",
+    "clsx": "^2.1.1",
+    "color-string": "^2.0.1",
+    "lucide-solid": "^0.475.0",
+    "mapbox-gl": "^3.10.0",
+    "solid-js": "^1.9.3",
+    "solid-map-gl": "^1.11.3",
+    "tailwind-merge": "^3.0.1",
+    "tailwindcss": "^4.0.6"
+  }
+}
