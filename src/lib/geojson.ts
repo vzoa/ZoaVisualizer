@@ -19,7 +19,7 @@ const getUniqueLayers = (features: GeoJSONFeature[]) => {
   return uniqueFeatures;
 };
 
-const comparePolyAlts = (p1: GeoJSONFeature, p2: GeoJSONFeature) => {
+const comparePolyAlts = (p1: mapboxgl.MapboxGeoJSONFeature, p2: mapboxgl.MapboxGeoJSONFeature) => {
   if (typeof p1.properties?.minAlt === "undefined" && typeof p2.properties?.minAlt === "undefined")
     return 0;
   if (typeof p1.properties?.minAlt === "undefined" && typeof p2.properties?.minAlt !== "undefined")
@@ -27,9 +27,9 @@ const comparePolyAlts = (p1: GeoJSONFeature, p2: GeoJSONFeature) => {
   if (typeof p1.properties?.minAlt !== "undefined" && typeof p2.properties?.minAlt === "undefined")
     return 1;
   if (p1.properties?.minAlt == p2.properties?.minAlt) {
-    return p1.properties?.maxAlt - p2.properties?.maxAlt;
+    return p2.properties?.maxAlt - p1.properties?.maxAlt;
   }
-  return p1.properties?.minAlt - p2.properties?.minAlt;
+  return p2.properties?.minAlt - p1.properties?.minAlt;
 };
 
 const getFillColor = (paint: FillPaint | null | undefined): string => {
