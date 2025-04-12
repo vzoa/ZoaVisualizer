@@ -73,3 +73,21 @@ export type RgbaDecimal = {
 };
 
 export type FillPaint = FillLayerSpecification["paint"];
+
+export interface ArrivalPoint {
+  id: string;
+  lat: number;
+  lon: number;
+}
+
+export interface ArrivalRoute {
+  id: string;
+  name: string;
+  points: ArrivalPoint[];
+}
+
+export interface Airport {
+  id: string;
+  name: string;
+  arrivals: ArrivalRoute[];
+}
