@@ -91,3 +91,10 @@ export interface Airport {
   name: string;
   arrivals: ArrivalRoute[];
 }
+
+export interface AirportSection {
+  id: string;
+  isExpanded: boolean;
+  arrivals: ArrivalRoute[];
+  selectedArrivalIds: Set<string>;
+}
