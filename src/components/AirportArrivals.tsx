@@ -16,19 +16,19 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
   const handleAirportSubmit = async (e: Event) => {
     e.preventDefault();
     const airport = airportInput().trim().toUpperCase();
-    
+
     if (!airport) {
       setError("Please enter an airport identifier");
       return;
     }
 
-    if (!/^K[A-Z]{3}$/.test(airport)) {
-      setError("Please enter a valid US airport identifier (e.g. KSFO)");
-      return;
-    }
+    // if (!/^K[A-Z]{3}$/.test(airport)) {
+    //   setError("Please enter a valid US airport identifier (e.g. KSFO)");
+    //   return;
+    // }
 
     // Check if airport already exists
-    if (airportSections.some(section => section.id === airport)) {
+    if (airportSections.some((section) => section.id === airport)) {
       setError("This airport has already been added");
       return;
     }
@@ -42,24 +42,26 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
         if (response.status === 404) {
           throw new Error(`No arrival procedures found for ${airport}`);
         }
-        throw new Error('Failed to fetch arrivals');
+        throw new Error("Failed to fetch arrivals");
       }
       const data = await response.json();
-      
-      setAirportSections(produce(sections => {
-        sections.push({
-          id: airport,
-          isExpanded: true,
-          arrivals: data,
-          selectedArrivalIds: new Set<string>()
-        });
-      }));
-      
+
+      setAirportSections(
+        produce((sections) => {
+          sections.push({
+            id: airport,
+            isExpanded: true,
+            arrivals: data,
+            selectedArrivalIds: new Set<string>(),
+          });
+        }),
+      );
+
       setAirportInput("");
       setError(null);
     } catch (error) {
-      console.error('Error fetching arrivals:', error);
-      setError(error instanceof Error ? error.message : 'Failed to fetch arrivals');
+      console.error("Error fetching arrivals:", error);
+      setError(error instanceof Error ? error.message : "Failed to fetch arrivals");
     } finally {
       setIsLoading(false);
     }
@@ -67,38 +69,42 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
 
   const toggleSection = (airportId: string) => {
     setAirportSections(
-      section => section.id === airportId,
-      produce(section => {
+      (section) => section.id === airportId,
+      produce((section) => {
         section.isExpanded = !section.isExpanded;
-      })
+      }),
     );
   };
 
   const deleteSection = (airportId: string) => {
     // First, uncheck all arrivals for this airport
-    const section = airportSections.find(s => s.id === airportId);
+    const section = airportSections.find((s) => s.id === airportId);
     if (section) {
-      section.arrivals.forEach(arrival => {
+      section.arrivals.forEach((arrival) => {
         if (section.selectedArrivalIds.has(arrival.id)) {
           props.onArrivalToggle(arrival, false);
         }
       });
     }
-    
+
     // Then remove the section
-    setAirportSections(sections => sections.filter(s => s.id !== airportId));
+    setAirportSections((sections) => sections.filter((s) => s.id !== airportId));
   };
 
-  const handleArrivalToggle = (section: AirportSection, arrival: ArrivalRoute, checked: boolean) => {
+  const handleArrivalToggle = (
+    section: AirportSection,
+    arrival: ArrivalRoute,
+    checked: boolean,
+  ) => {
     setAirportSections(
-      s => s.id === section.id,
-      produce(s => {
+      (s) => s.id === section.id,
+      produce((s) => {
         if (checked) {
           s.selectedArrivalIds.add(arrival.id);
         } else {
           s.selectedArrivalIds.delete(arrival.id);
         }
-      })
+      }),
     );
     props.onArrivalToggle(arrival, checked);
   };
@@ -161,12 +167,7 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
                   class="text-red-400 hover:text-red-300 focus:outline-none"
                   title="Remove airport"
                 >
-                  <svg
-                    class="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -195,4 +196,4 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
       </div>
     </div>
   );
-}; 
+};
