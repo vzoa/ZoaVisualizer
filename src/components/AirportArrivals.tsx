@@ -1,11 +1,11 @@
 import { Component, createSignal, For, Show } from "solid-js";
 import { Checkbox } from "./ui-core/Checkbox";
-import { AirportSection, ArrivalProcedure, ArrivalRoute } from "~/types";
+import { AirportSection, ArrivalProcedure, ArrivalProcedureDisplayState } from "~/types";
 import { createStore, produce } from "solid-js/store";
 import { NAVDATA_API_URL } from "~/config.ts";
 
 interface AirportArrivalsProps {
-  onArrivalToggle: (arrival: ArrivalRoute, isDisplayed: boolean) => void;
+  onArrivalToggle: (arrival: ArrivalProcedure, isDisplayed: boolean) => void;
 }
 
 export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
@@ -45,15 +45,14 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
         }
         throw new Error("Failed to fetch arrivals");
       }
-      const data: ArrivalProcedure[] = await response.json();
+      const procedures: ArrivalProcedure[] = await response.json();
 
-      let arrivals: ArrivalRoute[] = [];
-      for (const { arrivalIdentifier, sequences } of data) {
+      let arrivals: ArrivalProcedureDisplayState[] = [];
+      for (const p of procedures) {
         arrivals.push({
-          id: arrivalIdentifier,
-          name: arrivalIdentifier,
-          points: sequences.flatMap((s) => s.points),
+          id: p.arrivalIdentifier,
           isDisplayed: false,
+          procedure: p,
         });
       }
 
@@ -92,7 +91,7 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
     if (section) {
       section.arrivals.forEach((arrival) => {
         if (arrival.isDisplayed) {
-          props.onArrivalToggle(arrival, false);
+          props.onArrivalToggle(arrival.procedure, false);
         }
       });
     }
@@ -174,17 +173,17 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
                   <For each={section.arrivals}>
                     {(arrival) => (
                       <Checkbox
-                        label={arrival.name}
+                        label={arrival.id}
                         checked={arrival.isDisplayed}
                         onChange={(checked) => {
                           setAirportSections(
                             (a) => a.id === section.id,
                             "arrivals",
-                            (arr) => arr.name === arrival.name,
+                            (arr) => arr.id === arrival.id,
                             "isDisplayed",
                             checked,
                           );
-                          props.onArrivalToggle(arrival, checked);
+                          props.onArrivalToggle(arrival.procedure, checked);
                         }}
                       />
                     )}

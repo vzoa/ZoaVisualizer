@@ -1,54 +1,70 @@
 import { Component, For } from "solid-js";
 import { Layer, Source } from "solid-map-gl";
-import { ArrivalRoute } from "~/types";
+import { ArrivalProcedure, Sequence } from "~/types";
 
 interface ArrivalPointsProps {
-  arrivals: ArrivalRoute[];
+  arrivals: ArrivalProcedure[];
 }
+
+// const pointsToGeojsonCoords = (points: Point[]) => {
+//   let x = [...new Set(points.map((p) => [p.longitude, p.latitude]))];
+//   console.log(x);
+//   return x;
+// };
+
+const transitionString = (arrival: ArrivalProcedure, sequence: Sequence) => {
+  let transitionId = sequence.transition ? sequence.transition : "null";
+  return `${arrival.arrivalIdentifier}-${transitionId}`;
+};
 
 export const ArrivalPoints: Component<ArrivalPointsProps> = (props) => {
   return (
     <For each={props.arrivals}>
       {(arrival) => (
-        <Source
-          id={`arrival-${arrival.id}`}
-          source={{
-            type: "geojson",
-            data: {
-              type: "Feature",
-              geometry: {
-                type: "LineString",
-                coordinates: arrival.points.map((p) => [p.longitude, p.latitude]),
-              },
-              properties: {
-                name: arrival.name,
-              },
-            },
-          }}
-        >
-          <Layer
-            id={`arrival-line-${arrival.id}`}
-            style={{
-              type: "line",
-              paint: {
-                "line-color": "#FF9800",
-                "line-width": 2,
-              },
-            }}
-          />
-          <Layer
-            id={`arrival-points-${arrival.id}`}
-            style={{
-              type: "circle",
-              paint: {
-                "circle-radius": 4,
-                "circle-color": "#FF9800",
-                "circle-stroke-width": 1,
-                "circle-stroke-color": "#fff",
-              },
-            }}
-          />
-        </Source>
+        <For each={arrival.sequences}>
+          {(sequence) => (
+            <Source
+              id={transitionString(arrival, sequence)}
+              source={{
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  geometry: {
+                    type: "LineString",
+                    coordinates: sequence.points.map((p) => [p.longitude, p.latitude]),
+                  },
+                  properties: {
+                    arrival: arrival.arrivalIdentifier,
+                    transition: sequence.transition,
+                  },
+                },
+              }}
+            >
+              <Layer
+                id={`arrival-line-${transitionString(arrival, sequence)}`}
+                style={{
+                  type: "line",
+                  paint: {
+                    "line-color": "#000000",
+                    "line-width": 2,
+                  },
+                }}
+              />
+              <Layer
+                id={`arrival-points-${transitionString(arrival, sequence)}`}
+                style={{
+                  type: "circle",
+                  paint: {
+                    "circle-radius": 4,
+                    "circle-color": "#000000",
+                    "circle-stroke-width": 1,
+                    "circle-stroke-color": "#fff",
+                  },
+                }}
+              />
+            </Source>
+          )}
+        </For>
       )}
     </For>
   );

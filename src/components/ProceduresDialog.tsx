@@ -1,12 +1,12 @@
 import { Component } from "solid-js";
 import { Modal } from "./ui-core/Modal";
 import { AirportArrivals } from "./AirportArrivals";
-import { ArrivalRoute } from "~/types";
+import { ArrivalProcedure } from "~/types";
 
 interface ProceduresDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onArrivalToggle: (arrival: ArrivalRoute, isDisplayed: boolean) => void;
+  onArrivalToggle: (arrival: ArrivalProcedure, isDisplayed: boolean) => void;
 }
 
 export const ProceduresDialog: Component<ProceduresDialogProps> = (props) => {
@@ -15,4 +15,4 @@ export const ProceduresDialog: Component<ProceduresDialogProps> = (props) => {
       <AirportArrivals onArrivalToggle={props.onArrivalToggle} />
     </Modal>
   );
-}; 
+};

@@ -96,12 +96,18 @@ export interface ArrivalRoute {
 export interface AirportSection {
   id: string;
   isExpanded: boolean;
-  arrivals: ArrivalRoute[];
+  arrivals: ArrivalProcedureDisplayState[];
 }
 
 export interface ArrivalProcedure {
   arrivalIdentifier: string;
   sequences: Sequence[];
+}
+
+export interface ArrivalProcedureDisplayState {
+  id: string;
+  isDisplayed: boolean;
+  procedure: ArrivalProcedure;
 }
 
 export interface Sequence {

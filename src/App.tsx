@@ -14,7 +14,7 @@ import {
   PersistedBaseMapState,
   PopupState,
   Settings,
-  ArrivalRoute,
+  ArrivalProcedure,
 } from "~/types.ts";
 import { Checkbox } from "~/components/ui-core/Checkbox.tsx";
 import { Footer } from "~/components/Footer.tsx";
@@ -95,7 +95,7 @@ const App: Component = () => {
     vis: false,
   });
 
-  const [displayedArrivals, setDisplayedArrivals] = createSignal<ArrivalRoute[]>([]);
+  const [displayedArrivals, setDisplayedArrivals] = createSignal<ArrivalProcedure[]>([]);
   const [isProceduresOpen, setIsProceduresOpen] = createSignal(false);
 
   const altitudeHover = (evt: MapMouseEvent) => {
@@ -140,12 +140,12 @@ const App: Component = () => {
     else setCursor("grab");
   });
 
-  const handleArrivalToggle = (arrival: ArrivalRoute, isDisplayed: boolean) => {
-    setDisplayedArrivals(prev => {
+  const handleArrivalToggle = (arrival: ArrivalProcedure, isDisplayed: boolean) => {
+    setDisplayedArrivals((prev) => {
       if (isDisplayed) {
         return [...prev, arrival];
       } else {
-        return prev.filter(a => a.id !== arrival.id);
+        return prev.filter((a) => a.arrivalIdentifier !== arrival.arrivalIdentifier);
       }
     });
   };
