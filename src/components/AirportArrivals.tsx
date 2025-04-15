@@ -1,7 +1,8 @@
 import { Component, createSignal, For, Show } from "solid-js";
 import { Checkbox } from "./ui-core/Checkbox";
-import { AirportSection, ArrivalRoute } from "~/types";
+import { AirportSection, ArrivalProcedure, ArrivalRoute } from "~/types";
 import { createStore, produce } from "solid-js/store";
+import { NAVDATA_API_URL } from "~/config.ts";
 
 interface AirportArrivalsProps {
   onArrivalToggle: (arrival: ArrivalRoute, isDisplayed: boolean) => void;
@@ -37,22 +38,31 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/arrivals/${airport}`);
+      const response = await fetch(`${NAVDATA_API_URL}/arrivals/${airport}`);
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error(`No arrival procedures found for ${airport}`);
         }
         throw new Error("Failed to fetch arrivals");
       }
-      const data = await response.json();
+      const data: ArrivalProcedure[] = await response.json();
+
+      let arrivals: ArrivalRoute[] = [];
+      for (const { arrivalIdentifier, sequences } of data) {
+        arrivals.push({
+          id: arrivalIdentifier,
+          name: arrivalIdentifier,
+          points: sequences.flatMap((s) => s.points),
+          isDisplayed: false,
+        });
+      }
 
       setAirportSections(
         produce((sections) => {
           sections.push({
             id: airport,
             isExpanded: true,
-            arrivals: data,
-            selectedArrivalIds: new Set<string>(),
+            arrivals: arrivals,
           });
         }),
       );
@@ -81,7 +91,7 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
     const section = airportSections.find((s) => s.id === airportId);
     if (section) {
       section.arrivals.forEach((arrival) => {
-        if (section.selectedArrivalIds.has(arrival.id)) {
+        if (arrival.isDisplayed) {
           props.onArrivalToggle(arrival, false);
         }
       });
@@ -89,24 +99,6 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
 
     // Then remove the section
     setAirportSections((sections) => sections.filter((s) => s.id !== airportId));
-  };
-
-  const handleArrivalToggle = (
-    section: AirportSection,
-    arrival: ArrivalRoute,
-    checked: boolean,
-  ) => {
-    setAirportSections(
-      (s) => s.id === section.id,
-      produce((s) => {
-        if (checked) {
-          s.selectedArrivalIds.add(arrival.id);
-        } else {
-          s.selectedArrivalIds.delete(arrival.id);
-        }
-      }),
-    );
-    props.onArrivalToggle(arrival, checked);
   };
 
   return (
@@ -183,8 +175,17 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
                     {(arrival) => (
                       <Checkbox
                         label={arrival.name}
-                        checked={section.selectedArrivalIds.has(arrival.id)}
-                        onChange={(checked) => handleArrivalToggle(section, arrival, checked)}
+                        checked={arrival.isDisplayed}
+                        onChange={(checked) => {
+                          setAirportSections(
+                            (a) => a.id === section.id,
+                            "arrivals",
+                            (arr) => arr.name === arrival.name,
+                            "isDisplayed",
+                            checked,
+                          );
+                          props.onArrivalToggle(arrival, checked);
+                        }}
                       />
                     )}
                   </For>

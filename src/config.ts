@@ -221,3 +221,5 @@ export const POLY_DEFINITIONS = [
   PAC_NORTH_POLYS,
   PAC_SOUTH_POLYS,
 ];
+
+export const NAVDATA_API_URL = "https://navdata.oakartcc.org"

@@ -18,12 +18,12 @@ export const ArrivalPoints: Component<ArrivalPointsProps> = (props) => {
               type: "Feature",
               geometry: {
                 type: "LineString",
-                coordinates: arrival.points.map(p => [p.lon, p.lat])
+                coordinates: arrival.points.map((p) => [p.longitude, p.latitude]),
               },
               properties: {
-                name: arrival.name
-              }
-            }
+                name: arrival.name,
+              },
+            },
           }}
         >
           <Layer
@@ -32,8 +32,8 @@ export const ArrivalPoints: Component<ArrivalPointsProps> = (props) => {
               type: "line",
               paint: {
                 "line-color": "#FF9800",
-                "line-width": 2
-              }
+                "line-width": 2,
+              },
             }}
           />
           <Layer
@@ -44,12 +44,12 @@ export const ArrivalPoints: Component<ArrivalPointsProps> = (props) => {
                 "circle-radius": 4,
                 "circle-color": "#FF9800",
                 "circle-stroke-width": 1,
-                "circle-stroke-color": "#fff"
-              }
+                "circle-stroke-color": "#fff",
+              },
             }}
           />
         </Source>
       )}
     </For>
   );
-}; 
+};
