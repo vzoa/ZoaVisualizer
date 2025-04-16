@@ -156,6 +156,14 @@ const App: Component = () => {
         <div class="flex flex-col space-y-4">
           <h1 class="text-white text-2xl">ZOA Visualizer</h1>
 
+          <button
+            onClick={() => setIsProceduresOpen(true)}
+            class="flex items-center justify-center w-36 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors"
+            title="Airport Procedures"
+          >
+            Procedures
+          </button>
+
           <Section header="Style">
             <MapStyleSelector style={mapStyle} setStyle={setMapStyle} />
           </Section>
@@ -187,13 +195,6 @@ const App: Component = () => {
               </For>
             </div>
           </Section>
-
-          <button
-            onClick={() => setIsProceduresOpen(true)}
-            class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors"
-          >
-            Airport Procedures
-          </button>
 
           <Section header="Sectors" class="space-y-2">
             <SectorDisplayWithControls
