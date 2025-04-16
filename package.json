@@ -27,7 +27,7 @@
     "color-string": "^2.0.1",
     "lucide-solid": "^0.475.0",
     "mapbox-gl": "^3.10.0",
-    "solid-js": "^1.9.3",
+    "solid-js": "^1.9.5",
     "solid-map-gl": "^1.11.3",
     "tailwind-merge": "^3.0.1",
     "tailwindcss": "^4.0.6"

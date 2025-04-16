@@ -14,6 +14,7 @@ import {
   PersistedBaseMapState,
   PopupState,
   Settings,
+  ArrivalProcedure,
 } from "~/types.ts";
 import { Checkbox } from "~/components/ui-core/Checkbox.tsx";
 import { Footer } from "~/components/Footer.tsx";
@@ -32,6 +33,8 @@ import { GeoJSONFeature, MapMouseEvent } from "mapbox-gl";
 import { getUniqueLayers, isTransparentFill } from "~/lib/geojson.ts";
 import { logIfDev } from "~/lib/dev.ts";
 import { InfoPopup } from "~/components/InfoPopup.tsx";
+import { ProceduresDialog } from "~/components/ProceduresDialog.tsx";
+import { ArrivalPoints } from "~/components/ArrivalPoints.tsx";
 
 const createDefaultState = (area: AreaDefinition): AirspaceDisplayState => ({
   name: area.name,
@@ -92,6 +95,9 @@ const App: Component = () => {
     vis: false,
   });
 
+  const [displayedArrivals, setDisplayedArrivals] = createSignal<ArrivalProcedure[]>([]);
+  const [isProceduresOpen, setIsProceduresOpen] = createSignal(false);
+
   const altitudeHover = (evt: MapMouseEvent) => {
     if (!evt.target.isStyleLoaded()) return;
     const features: GeoJSONFeature[] = evt.target.queryRenderedFeatures(evt.point, {
@@ -134,11 +140,29 @@ const App: Component = () => {
     else setCursor("grab");
   });
 
+  const handleArrivalToggle = (arrival: ArrivalProcedure, isDisplayed: boolean) => {
+    setDisplayedArrivals((prev) => {
+      if (isDisplayed) {
+        return [...prev, arrival];
+      } else {
+        return prev.filter((a) => a.arrivalIdentifier !== arrival.arrivalIdentifier);
+      }
+    });
+  };
+
   return (
     <div class="flex h-screen">
       <div class="flex flex-col bg-slate-900 p-4 justify-between overflow-scroll">
         <div class="flex flex-col space-y-4">
           <h1 class="text-white text-2xl">ZOA Visualizer</h1>
+
+          <button
+            onClick={() => setIsProceduresOpen((prev) => !prev)}
+            class="flex items-center justify-center w-36 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors"
+            title="Airport Procedures"
+          >
+            Procedures
+          </button>
 
           <Section header="Style">
             <MapStyleSelector style={mapStyle} setStyle={setMapStyle} />
@@ -209,7 +233,7 @@ const App: Component = () => {
       <div class="grow relative">
         <InfoPopup popupState={popup} settings={settings} />
 
-        <div class="absolute top-5 left-5 z-50 flex">
+        <div class="absolute top-5 left-5 z-50 flex space-x-2">
           <SettingsDialog settings={settings} setSettings={setSettings} />
         </div>
 
@@ -230,8 +254,15 @@ const App: Component = () => {
           <BaseMaps persistedMapsState={persistedBaseMaps} mountedMapsState={mountedBaseMaps} />
           <GeojsonPolySources sources={sources} />
           <GeojsonPolyLayers displayStateStore={allStore} />
+          <ArrivalPoints arrivals={displayedArrivals()} />
         </MapGL>
       </div>
+
+      <ProceduresDialog
+        isOpen={isProceduresOpen()}
+        onClose={() => setIsProceduresOpen(false)}
+        onArrivalToggle={handleArrivalToggle}
+      />
     </div>
   );
 };

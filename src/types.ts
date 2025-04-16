@@ -73,3 +73,53 @@ export type RgbaDecimal = {
 };
 
 export type FillPaint = FillLayerSpecification["paint"];
+
+// export interface ArrivalPoint {
+//   id: string;
+//   lat: number;
+//   lon: number;
+// }
+
+export interface ArrivalRoute {
+  id: string;
+  name: string;
+  points: Point[];
+  isDisplayed: boolean;
+}
+
+// export interface Airport {
+//   id: string;
+//   name: string;
+//   arrivals: ArrivalRoute[];
+// }
+
+export interface AirportSection {
+  id: string;
+  isExpanded: boolean;
+  arrivals: ArrivalProcedureDisplayState[];
+}
+
+export interface ArrivalProcedure {
+  arrivalIdentifier: string;
+  sequences: Sequence[];
+}
+
+export interface ArrivalProcedureDisplayState {
+  id: string;
+  isDisplayed: boolean;
+  procedure: ArrivalProcedure;
+}
+
+export interface Sequence {
+  transition?: string;
+  transitionType: "AreaNavigationCommon" | "AreaNavigationEnroute" | "AreaNavigationRunway";
+  points: Point[];
+}
+
+export interface Point {
+  identifier: string;
+  latitude: number;
+  longitude: number;
+  minAltitude?: string;
+  maxAltitude?: string;
+}
