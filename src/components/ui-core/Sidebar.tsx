@@ -10,8 +10,9 @@ interface SidebarProps {
 export const Sidebar: Component<SidebarProps> = (props) => {
   return (
     <div
-      class={`fixed left-0 top-0 h-full z-50 transition-transform duration-300 ease-in-out ${
-        props.isOpen ? "translate-x-0" : "-translate-x-full"
+      class={`fixed left-53 top-0 h-full z-50 transition-opacity duration-300 ease-in-out ${
+        //props.isOpen ? "translate-x-52" : "-translate-x-full"
+        props.isOpen ? "opacity-100 visible" : "opacity-0 invisible"
       }`}
     >
       <div class="h-full w-80 bg-slate-800 shadow-xl">

@@ -157,7 +157,7 @@ const App: Component = () => {
           <h1 class="text-white text-2xl">ZOA Visualizer</h1>
 
           <button
-            onClick={() => setIsProceduresOpen(true)}
+            onClick={() => setIsProceduresOpen((prev) => !prev)}
             class="flex items-center justify-center w-36 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors"
             title="Airport Procedures"
           >
