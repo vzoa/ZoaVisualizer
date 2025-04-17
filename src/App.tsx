@@ -158,7 +158,7 @@ const App: Component = () => {
 
           <button
             onClick={() => setIsProceduresOpen((prev) => !prev)}
-            class="flex items-center justify-center w-36 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors"
+            class="flex items-center justify-center w-36 h-10 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors cursor-pointer"
             title="Airport Procedures"
           >
             Procedures
