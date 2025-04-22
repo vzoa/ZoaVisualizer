@@ -116,7 +116,7 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
           <button
             type="submit"
             disabled={isLoading()}
-            class="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white px-4 py-2 rounded transition-colors"
+            class="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white px-2 py-2 rounded transition-colors"
           >
             {isLoading() ? "Loading..." : "Add"}
           </button>
@@ -129,7 +129,7 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
       <div class="space-y-4">
         <For each={airportSections}>
           {(section) => (
-            <div class="bg-slate-800 rounded p-4">
+            <div class="bg-slate-800 rounded py-4">
               <div class="flex items-center space-x-3">
                 <button
                   onClick={() => toggleSection(section.id)}
@@ -169,7 +169,7 @@ export const AirportArrivals: Component<AirportArrivalsProps> = (props) => {
                 </button>
               </div>
               <Show when={section.isExpanded}>
-                <div class="mt-3 space-y-1 pl-7">
+                <div class="mt-3 space-y-1 pl-4">
                   <For each={section.arrivals}>
                     {(arrival) => (
                       <Checkbox

@@ -15,7 +15,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
         props.isOpen ? "opacity-100 visible" : "opacity-0 invisible"
       }`}
     >
-      <div class="h-full w-80 bg-slate-800 shadow-xl">
+      <div class="h-full w-48 bg-slate-800 shadow-xl">
         {/* Header */}
         <div class="flex items-center justify-between p-4 border-b border-slate-700">
           <h2 class="text-xl font-semibold text-white">{props.title}</h2>
